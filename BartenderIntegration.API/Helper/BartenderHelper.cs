@@ -1,4 +1,5 @@
-﻿using BartenderIntegration.Infrastructure.Models;
+﻿using BartenderIntegration.API.Model;
+using BartenderIntegration.Infrastructure.Models;
 using Microsoft.Extensions.Options;
 
 namespace BartenderIntegration.API.Helper
@@ -14,16 +15,20 @@ namespace BartenderIntegration.API.Helper
             _appSettings = options.Value;
         }
 
-        public async Task SendRequestAsync(List<string> data)
+        public async Task SendRequestAsync(CustomerModel data)
         {
             try
             {
-                var client = new HttpClient();
-                var url = new Uri(_appSettings.BartenderURL);
-                foreach (var item in data)
+                if (data == null)
                 {
-                    var response = await client.PostAsJsonAsync(url, data);
+                    _logger.LogInformation("CustomerIds are not exists in the request.");
+                    return;
                 }
+                var client = new HttpClient();
+                var url = new Uri(_appSettings.BartenderURL); 
+
+                var response = await client.PostAsJsonAsync(url, data);
+
             }
             catch (Exception ex)
             {
@@ -35,6 +40,6 @@ namespace BartenderIntegration.API.Helper
 
     public interface IBartenderHelper
     {
-        Task SendRequestAsync(List<string> data);
+        Task SendRequestAsync(CustomerModel data);
     }
 }

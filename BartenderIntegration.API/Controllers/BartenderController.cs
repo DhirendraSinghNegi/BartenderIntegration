@@ -41,9 +41,9 @@ namespace BartenderIntegration.API.Controllers
         }
 
         [Authorize, HttpPost, Route("PostData")]
-        public IActionResult PostData([FromBody] List<string> customerIds)
+        public IActionResult PostData([FromBody] CustomerModel data)
         {
-            bartenderHelper.SendRequestAsync(customerIds).ConfigureAwait(false);
+            bartenderHelper.SendRequestAsync(data).ConfigureAwait(false);
             return Ok();
         }
     }
