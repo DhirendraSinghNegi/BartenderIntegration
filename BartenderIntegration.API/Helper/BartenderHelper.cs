@@ -15,6 +15,25 @@ namespace BartenderIntegration.API.Helper
             _appSettings = options.Value;
         }
 
+        public async Task PrintDataServiceAsync(PrintDataModel data)
+        {
+            try
+            {
+                if (data == null)
+                {
+                    _logger.LogInformation("data does not exists");
+                    return;
+                }
+                var client = new HttpClient();
+                var url = new Uri(_appSettings.BartenderURL2);
+                var response = await client.PostAsJsonAsync(url, data);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "An error occured while sending the request.");
+                throw;
+            }
+        }
         public async Task SendRequestAsync(CustomerModel data)
         {
             try
@@ -25,7 +44,7 @@ namespace BartenderIntegration.API.Helper
                     return;
                 }
                 var client = new HttpClient();
-                var url = new Uri(_appSettings.BartenderURL); 
+                var url = new Uri(_appSettings.BartenderURL);
 
                 var response = await client.PostAsJsonAsync(url, data);
 
@@ -41,5 +60,6 @@ namespace BartenderIntegration.API.Helper
     public interface IBartenderHelper
     {
         Task SendRequestAsync(CustomerModel data);
+        Task PrintDataServiceAsync(PrintDataModel data);
     }
 }

@@ -46,5 +46,12 @@ namespace BartenderIntegration.API.Controllers
             bartenderHelper.SendRequestAsync(data).ConfigureAwait(false);
             return Ok();
         }
+
+        [Authorize, HttpPost, Route("PrintData")]
+        public IActionResult PrintData([FromBody] PrintDataModel data)
+        {
+            bartenderHelper.PrintDataServiceAsync(data).ConfigureAwait(false);
+            return Ok();
+        }
     }
 }
